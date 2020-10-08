@@ -51,6 +51,9 @@ class ToggleSwitch extends StatefulWidget {
   /// Initial label index
   int initialLabelIndex;
 
+  /// Use the custom rounded corner code
+  bool useRoundedCornerFix;
+
   ToggleSwitch({
     Key key,
     @required this.labels,
@@ -68,6 +71,7 @@ class ToggleSwitch extends StatefulWidget {
     this.activeBgColors,
     this.fontSize = 14.0,
     this.iconSize = 17.0,
+    this.useRoundedCornerFix = true,
   }) : super(key: key);
 
   @override
@@ -152,7 +156,7 @@ class _ToggleSwitchState extends State<ToggleSwitch>
 
               /// Returns item divider
               return Container(
-                width: 0,
+                width: widget.useRoundedCornerFix ? 0 : 1,
                 color: activeDivider ? bgColor : Colors.white30,
                 margin: EdgeInsets.symmetric(vertical: activeDivider ? 0 : 8),
               );
@@ -161,14 +165,18 @@ class _ToggleSwitchState extends State<ToggleSwitch>
               return GestureDetector(
                 onTap: () => _handleOnTap(index ~/ 2),
                 child: Container(
-                  decoration: BoxDecoration(
-                    color: bgColor,
-                    borderRadius: BorderRadius.circular(widget.cornerRadius),
-                  ),
+                  decoration: widget.useRoundedCornerFix
+                      ? BoxDecoration(
+                          color: bgColor,
+                          borderRadius:
+                              BorderRadius.circular(widget.cornerRadius),
+                        )
+                      : null,
                   padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                   constraints: BoxConstraints(
                       maxWidth: _calculateWidth(widget.minWidth)),
                   alignment: Alignment.center,
+                  color: widget.useRoundedCornerFix ? null : bgColor,
                   child: widget.icons == null
                       ? Text(
                           widget.labels[index ~/ 2],
